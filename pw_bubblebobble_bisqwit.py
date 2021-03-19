@@ -31,17 +31,19 @@ def encode(lv,sp,st):
 
 def gameAttr(num):
 	bit=["0"*(4-len(bin(int(i))[2:]))+bin(int(i))[2:] for i in num]
+	checksum=int(bit[0][1:],2)+int(bit[1][1:],2)+int(bit[2][3],2)+int(bit[3][1]+bit[3][2:],2)
 	attribute={
 		"LevelNum":int(bit[0][1:]+bit[1][1:]+bit[2][3],2),
 		"SuperFlag":int(bit[3][1],2),
 		"Something":int(bit[3][2:],2),
-		"Checksum":int(bit[0][1:],2)+int(bit[1][1:],2)+int(bit[2][3],2)+int(bit[3][1]+bit[3][2:],2)
+		"ChecksumCorrect":int(bit[2][1:3]+bit[4][1:],2)==checksum
 	}
 	return attribute
 
 def formatstr(obj):
 	if obj["SuperFlag"]==0:print("\nHere's your game!\nBubble Bobble - Level %d - Something %d\n"%(obj["LevelNum"],obj["Something"]))
 	elif obj["SuperFlag"]==1:print("\nHere's your game!\nSuper Bubble Bobble - Level %d - Something %d\n"%(obj["LevelNum"],obj["Something"]))
+	if not obj["ChecksumCorrect"]:print("Warning! The checksum does not match.\n")
 
 print("BUBBLE BOBBLE PASSWORD ENCODER/DECODER - Python Edition\nOriginal concept by Joel \"Bisqwit\" Yliluoma\nConversion to Python by Katsumi Kougen\n")
 while True:
